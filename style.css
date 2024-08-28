@@ -1,0 +1,336 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.navigation a.disabled,
+.navigation .btnLogin-popup.disabled {
+    pointer-events: none; /* Không cho phép nhấp chuột vào phần tử */
+    opacity: 0.5; /* Làm phần tử mờ đi */
+    cursor: default; /* Thay đổi con trỏ chuột khi di chuột qua phần tử */
+}
+
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('coffeebackground.jpg') no-repeat center center/cover;
+    position: relative; /* Đảm bảo lớp phủ căn chỉnh chính xác */
+}
+
+/* Thêm lớp phủ tối */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Đổi màu hoặc độ mờ theo nhu cầu */
+    z-index: 1;
+    pointer-events: none; /* Đảm bảo lớp phủ không chặn các tương tác chuột */
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1; /* Đảm bảo lớp phủ nằm trên tất cả các phần tử khác */
+    opacity: 1; /* Đảm bảo lớp phủ luôn hiển thị */
+    transition: opacity 0.5s ease; /* Hiệu ứng chuyển tiếp cho opacity */
+    display: none; /* Ẩn lớp phủ mặc định */
+}
+
+.overlay.show {
+    display: block; /* Hiển thị lớp phủ khi cần */
+}
+
+.content {
+    position: relative;
+    z-index: 2; /* Đảm bảo nội dung nằm trên lớp phủ */
+    color: white;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.logo {
+    font-size: 2em;
+    color: #fff;
+}
+
+.navigation a {
+    position: relative;
+    font-size: 1.1em;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.navigation a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 5px;
+    transform: scaleX(0);
+    transition: transform 0.5s;
+}
+
+.navigation a:hover::after {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+
+.navigation .btnLogin-popup {
+    width: 130px;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #fff;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #fff;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: 0.5s;
+    opacity: 1;
+}
+
+.navigation .btnLogin-popup:hover {
+    background: #fff;
+    color: #000;
+}
+
+.wrapper {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    width: 100%;
+    margin: 20px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-30px); /* Bắt đầu ở vị trí trượt lên */
+    transition: opacity 0.5s ease, transform 0.5s ease; /* Thêm transition cho opacity và transform */
+}
+
+.wrapper.show {
+    opacity: 1;
+    transform: translateY(0); /* Trượt xuống về vị trí ban đầu */
+}
+
+.wrapper h2 {
+    margin-bottom: 20px; /* Điều chỉnh khoảng cách giữa tiêu đề và ô nhập liệu */
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 10px;
+    padding-left: 40px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+}
+
+.input-box label {
+    position: absolute;
+    left: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    transition: 0.3s;
+    color: #999;
+}
+
+.input-box input:focus + label,
+.input-box input:not(:placeholder-shown) + label {
+    top: 20px;
+    left: 40px;
+    font-size: 12px;
+    color: #333;
+    opacity: 0;
+}
+
+.remember-forgot {
+    display: flex;
+    align-items: center; /* Canh giữa theo chiều dọc */
+    justify-content: space-between;
+}
+
+.remember-forgot label {
+    display: flex;
+    align-items: center; /* Canh giữa theo chiều dọc */
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #333;
+}
+
+.remember-forgot input[type="checkbox"] {
+    margin-right: 5px; /* Khoảng cách giữa checkbox và chữ */
+}
+
+.remember-forgot a {
+    color: purple;
+    text-decoration: none;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.btn {
+    width: 100%;
+    height: 45px;
+    background: #162938;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+    color: rgb(144, 255, 253);
+    font-weight: 500;
+}
+
+.login-register {
+    font-size: 0.9em;
+    color: black;
+    text-align: center;
+    font-weight: 500;
+    margin: 25px 0 10px;
+}
+
+.wrapper .icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    font-size: 2em;
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+body {
+    position: relative;
+    overflow: hidden; /* Đảm bảo tuyết không bị cắt ra ngoài khung nhìn */
+    background: url('coffeebackground.jpg') no-repeat center center/cover;
+}
+
+/* Lớp tuyết */
+.snowflake {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    width: 3px; /* Kích thước nhỏ hơn cho hiệu ứng mưa tuyết */
+    height: 3px; /* Kích thước nhỏ hơn cho hiệu ứng mưa tuyết */
+    opacity: 0.7; /* Độ mờ */
+    pointer-events: none; /* Đảm bảo tuyết không ảnh hưởng đến các phần tử khác */
+    top: -10px; /* Bắt đầu từ trên đầu trang */
+    z-index: 1000; /* Đảm bảo tuyết nằm trên các phần tử khác */
+}
+
+@keyframes snowfall {
+    to {
+        transform: translateY(100vh); /* Tuyết rơi từ trên xuống dưới */
+    }
+}
+
+/* Thay đổi tốc độ và thời gian rơi của các hạt tuyết */
+.snowflake:nth-child(1) { animation: snowfall 2s linear infinite; }
+.snowflake:nth-child(2) { animation: snowfall 2.5s linear infinite; }
+.snowflake:nth-child(3) { animation: snowfall 3s linear infinite; }
+.snowflake:nth-child(4) { animation: snowfall 4s linear infinite; }
+.snowflake:nth-child(5) { animation: snowfall 5s linear infinite; }
+
+/* Glitch Effect */
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+        opacity: 1;
+    }
+    20% {
+        transform: translate(-2px, -2px);
+        opacity: 0.8;
+    }
+    40% {
+        transform: translate(2px, 2px);
+        opacity: 1;
+    }
+    60% {
+        transform: translate(-1px, -1px);
+        opacity: 0.9;
+    }
+    80% {
+        transform: translate(1px, 1px);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(0);
+        opacity: 1;
+    }
+}
+
+/* Crack Animation */
+@keyframes crack {
+    0% {
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), 0 0 20px rgba(255, 0, 0, 0.3), 0 0 30px rgba(255, 0, 0, 0.2);
+    }
+    100% {
+        box-shadow: none;
+    }
+}
+
+/* Apply Glitch and Crack to Button */
+.navigation .btnLogin-popup.glitch {
+    animation: glitch 0.3s linear infinite, crack 0.5s ease;
+}
+
+/* Transition for Button Restore */
+.navigation .btnLogin-popup.transition {
+    transition: all 0.3s ease;
+}
